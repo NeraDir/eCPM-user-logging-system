@@ -18,27 +18,8 @@ admin.initializeApp({
 });
 
 
+
 const db = admin.database();
-const daysToCalculate = 0;
-
-async function shouldRunScript() {
-  const initDateSnap = await db.ref("Data/1_InitDate").once("value");
-
-  if (!initDateSnap.exists()) {
-    return false;
-  }
-
-  const initDateStr = initDateSnap.val();
-  const initDate = new Date(initDateStr);
-  if (isNaN(initDate)) {
-    return false;
-  }
-
-  const now = new Date();
-  const diffDays = (now - initDate) / (1000 * 60 * 60 * 24);
-
-  return diffDays >= daysToCalculate;
-}
 
 async function calculateAvgEcpm() {
   const dataRef = db.ref("Data");
@@ -63,7 +44,7 @@ async function calculateAvgEcpm() {
     if (count > 0) {
       const avgEcpm = totalEcpm / count;
       await dataRef.child(country).child("AvgEcpm").set(avgEcpm.toFixed(2));
-      console.log(`[${country}] AvgEcpm: ${avgEcpm.toFixed(2)}`);
+      console.log([${country}] AvgEcpm: ${avgEcpm.toFixed(2)});
     }
   }
 }
@@ -89,18 +70,12 @@ async function findAllMoreAvgEcpm() {
 
     if (aboveAvgUsers.length > 0) {
       await dataRef.child(country).child("AboveAvgUsers").set(aboveAvgUsers);
+      console.log([${country}] AboveAvgUsers: ${aboveAvgUsers.length});
     }
   }
 }
 
 (async () => {
-  const shouldRun = await shouldRunScript();
-
-  if (shouldRun) {
-    console.log("Идет подсчет...");
-    await calculateAvgEcpm();
-    await findAllMoreAvgEcpm();
-  } else {
-    console.log("Рано");
-  }
+  await calculateAvgEcpm();
+  await findAllMoreAvgEcpm();
 })();

@@ -44,7 +44,7 @@ async function calculateAvgEcpm() {
     if (count > 0) {
       const avgEcpm = totalEcpm / count;
       await dataRef.child(country).child("AvgEcpm").set(avgEcpm.toFixed(2));
-      console.log([${country}] AvgEcpm: ${avgEcpm.toFixed(2)});
+     
     }
   }
 }
@@ -70,7 +70,7 @@ async function findAllMoreAvgEcpm() {
 
     if (aboveAvgUsers.length > 0) {
       await dataRef.child(country).child("AboveAvgUsers").set(aboveAvgUsers);
-      console.log([${country}] AboveAvgUsers: ${aboveAvgUsers.length});
+     
     }
   }
 }
